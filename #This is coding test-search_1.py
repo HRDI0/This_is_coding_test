@@ -1,64 +1,50 @@
-#DFS, BFS
-#사전 학습
+#N, M 크기의 얼음 틀이 있다. 구멍이 뚫려 있는 부분은 0, 칸막이가 존재하는 부분은 1로 표시된다. 
+# 구멍이 뚫려 있는 부분끼리 상, 하, 좌, 우로 붙어 있는 경우 서로 연결되어 있는 것으로 간주한다. 
+# 이때 얼음 틀의 모양이 주어졌을 때 생성되는 총 아이스크림의 개수를 구하는 프로그램을 작성하시오.
 
-#스택과 큐
+# 입력 예시
+# 15 14
+# 00000111100000
+# 11111101111110
+# 11011101101110
+# 11011101100000
+# 11011111111111
+# 11011111111100
+# 11000000011111
+# 01111111111111
+# 00000000011111
+# 01111111111000
+# 00011111111000
+# 00000001111000
+# 11111111110011
+# 11100011111111
+# 11100011111111
 
-# stack = []      #스택은 별도의 라이브러리가 불필요함. FILO 선입 후출 방식.
-# #삽입(5) - 삽입(2) - 삭제() - 삽입(3)
-# stack.append(5)
-# print(stack)
-# stack.append(2)
-# print(stack)
-# stack.pop()
-# print(stack)
-# stack.append(3)
-# print(stack)
+# 출력 예시
+# 8
 
-# from collections import deque
+n,m = map(int, input().split())
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input())))
 
-# # 큐 구현을 위해 deque() 라이브러리 사용
-# queue = deque()
-# #삽입(5) - 삽입(3) - 삭제() - 삽입(2)
-# queue.append(5)
-# print(queue)
-# queue.append(3)
-# print(queue)
-# queue.popleft()
-# print(queue)
-# queue.append(2)
-# print(queue)
+def dfs(x,y):
+    if x< 0 or x >=n or y < 0 or y >= m:    #입력받은 좌표가 범위를 범어난다면 종료 처리
+        return False
+    if graph[x][y] == 0:        #방문 확인
+        graph[x][y] = 1         #미방문시 방문 처리
+        # 상하좌우 확인
+        dfs(x-1, y)
+        dfs(x+1, y)
+        dfs(x,y-1)
+        dfs(x, y+1)
+        return True
+    else:
+        return False
 
-
-#DFS #BFS
-
-def dfs(graph, v, visited):
-    #현재 노드 방문처리
-    visited[v] = True
-    print(v, end=' ')
-    #현재 노드와 연결된 다른 노드를 재귀적으로 방문
-    for i in graph[v]:
-        if not visited[i]:
-            dfs(graph, i, visited)
-
-from collections import deque
-def bfs(graph, start, visited):
-    #현재 노드와 인접한 노드 방문 처리
-    queue = deque()
-    
-
-graph = [
-    [],
-    [2,3,8],
-    [1,7],
-    [1,4,5],
-    [3,5],
-    [3,4],
-    [7],
-    [2,6,8],
-    [1,7]
-]
-
-visited = [False] * len(graph) #총 노드의 개수
-
-print('DFS')
-dfs(graph, 1, visited) 
+result = 0
+for i in range(n):
+    for j in range(m):
+        if dfs(i,j):
+            result +=1
+print(result)
